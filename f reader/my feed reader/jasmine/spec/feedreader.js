@@ -102,29 +102,39 @@ $(function() {
         });
                           
     /* TODO: Write a new test suite named "New Feed Selection" */
-     describe("New Feed Selection", function() {
+    describe('New Feed Selection', function() {
+	    var firstFeed, secondFeed;
+        
+        // Ensures that the new feed is loaded via the loadFeed function
+		beforeEach(function(done) {
+            loadFeed(1, function() {
 
-    // Avoid duplicated setup
-    // Initial loaded feed setup
-    var initFeedSelection;
-    beforeEach(function(done) {
-      loadFeed(0, function() {
-        initFeedSelection = document.querySelector(".feed").innerHTML;
+                // Tests if first feed is loaded
+                console.log('First feed loaded!')
 
-        loadFeed(1, function() {
-          done();
+                // Loads first entry and checks
+                firstFeed = $('.feed').html();
+                loadFeed(2, function() {
+
+                    // Tests if second feed is loaded
+                    console.log('Second feed loaded!')
+                    done();
+                });
+            });        
+         });
+		
+		afterEach(function() {
+            loadFeed(0);
         });
-      });
-    });
 
-    // Make sure when new feed is loaded using loadFeed function,
-    // the content changes
-    it("changes its loaded content", function(done) {
-      var newFeedSelection = document.querySelector(".feed").innerHTML;
-      expect(initFeedSelection).not.toBe(newFeedSelection);
-      done();
-    });
-  });
+        // Tests to see if two entries are not equal
+		it('checks if two feeds are different', function() {
+
+            // Checks second feed
+            secondFeed = $('.feed').html();
+            expect(firstFeed).not.toEqual(secondFeed);
+        }); 
+	});
 
 });
 
